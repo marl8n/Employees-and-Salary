@@ -9,6 +9,12 @@ namespace Employees_and_Salaries.Reports
 {
     class Report
     {
+        private string id;
+        private string v1;
+        private int v2;
+        private int v3;
+        private double v4;
+
         public string EmployeeId { get; set; }
         public string EmployeeName { get; set; }
         public double HourlyWage { get; set; }

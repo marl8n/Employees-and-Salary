@@ -24,9 +24,34 @@ namespace Employees_and_Salaries.BusinessLogic
             this.Reports = JsonToReports.LoadFromFileOrNewList(reportsFile).ToList();
         }
 
+        public Employee AddEmployee(Employee employee)
+        {
+            this.Employees.Add(employee);
+            return employee;
+        }
+
         public Employee GetEmployee(string Id)
         {
             return Employees.Where(Employee => Employee.Id == Id).First();
+        }
+
+        public Salary AddSalary(Salary salary)
+        {
+            this.Salaries.Add(salary);
+            return salary;
+        }
+
+        public Report GetReport(string id)
+        {
+            try
+            {
+
+                return Reports.Where(report => report.EmployeeId == id).First();
+            } 
+            catch
+            {
+                return new Report(id, "Not founded", 0.0, 0, 0.0, 0.0);
+            }
         }
 
         public List<Report> MakeReports ()
@@ -34,6 +59,11 @@ namespace Employees_and_Salaries.BusinessLogic
             Reports.Clear();
             Reports = Reporter.MakeReport(Employees, Salaries).ToList();
             return this.Reports;
+        }
+
+        public IEnumerable<Dictionary<string, string>> ReportsByMonth()
+        {
+            return Reporter.MakeReportByMonth(this.Employees, this.Salaries);
         }
 
         public void SaveEmployees(string fileName = "employees.json")
@@ -53,6 +83,7 @@ namespace Employees_and_Salaries.BusinessLogic
 
         public void SaveAll(string employeesFile = "employees.json", string salariesFile = "salaries.json", string reportsFile = "reports.json")
         {
+            MakeReports();
             SaveEmployees(employeesFile);
             SaveSalaries(salariesFile);
             SaveReports(reportsFile);

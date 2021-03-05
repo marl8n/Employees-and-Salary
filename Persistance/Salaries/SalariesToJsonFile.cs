@@ -17,8 +17,8 @@ namespace Employees_and_Salaries.Persistance.Salaries
             if (File.Exists(fileName))
             {
                 File.Delete(fileName);
-                writeJson(json, fileName);
             }
+            writeJson(json, fileName);
         }
 
         private static void writeJson(string json, string fileName)

@@ -48,5 +48,47 @@ namespace Employees_and_Salaries.Reports
             // return the list with all the reports
             return reports;
         }
+
+        public static IEnumerable<Dictionary<string, string>> MakeReportByMonth(IEnumerable<Employee> employees, IEnumerable<Salary> salaries)
+        {
+            // initialize reports list
+            List<Dictionary<string, string>> reports = new List<Dictionary<string, string>>();
+
+            // look for all the months that the employee works and add reports
+            foreach (var employee in employees)
+            {
+                //list of all salaries where the Employee.Id is equal to the salary.EmployeeId
+                List<Salary> employeeSalaries = salaries.ToList().Where(salary => salary.EmployeeId == employee.Id).ToList();
+
+                //total of hours worked all months
+                int hoursWorked = employeeSalaries.Sum(salary => salary.HoursAtMonth);
+
+                // sum of all salaries for the employee
+                double employeeSalary = ReportUtils.CalculateSalary(employee.HourlyWage, hoursWorked);
+
+                // months that the employee worked
+                int monthsWorked = employeeSalaries.Count;
+                foreach (var salary in salaries)
+                {
+                    var report = new Dictionary<string, string>();
+                    report.Add("Id", employee.Id);
+                    report.Add("Name", employee.Name);
+                    report.Add("Hours", salary.HoursAtMonth.ToString());
+                    report.Add("Month", salary.Month.ToString());
+                    // creates and add a new report to the report's list
+                    reports.Add(
+                        // string EmployeeId, string EmployeeName, double HourlyWage,
+                        // int HoursWorked, double Salary,double AverageSalary
+                        report
+                    );
+                }
+
+            }
+
+            // return the list with all the reports
+            return reports;
+        }
     }
+
+    
 }
